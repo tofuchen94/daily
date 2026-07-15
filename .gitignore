@@ -1,0 +1,41 @@
+# === Maven / Java ===
+backend/target/
+backend/*.jar
+*.class
+*.war
+*.log
+*.jar
+!backend/.mvn/wrapper/maven-wrapper.jar
+
+# === IDE ===
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+*~
+
+# === VS Code ===
+.vscode/
+
+# === Agent / AI ===
+.claude/
+.reasonix/
+reasonix.toml
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === Runtime / Data (SQLite) ===
+backend/data/
+*.db
+*.sqlite
+
+# === 微信小程序 (个人配置) ===
+miniprogram/project.private.config.json
+miniprogram/node_modules/
+
+# === 环境变量 / 敏感信息 ===
+.env
+*.local.*

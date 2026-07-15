@@ -1,0 +1,21 @@
+# ========== 本地开发 - SQLite ==========
+spring:
+  datasource:
+    url: jdbc:sqlite:data/daily.db
+    driver-class-name: org.sqlite.JDBC
+    hikari:
+      maximum-pool-size: 1
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level:
+    com.daily: debug
+
+server:
+  port: 8080
+
+app:
+  schema-location: classpath:schema.sql

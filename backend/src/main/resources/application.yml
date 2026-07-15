@@ -1,0 +1,15 @@
+# ========== 公共配置 ==========
+spring:
+  profiles:
+    active: dev
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: assign_id
+
+# schema 初始化脚本 (每个 profile 覆盖此路径)
+app:
+  schema-location: classpath:schema.sql

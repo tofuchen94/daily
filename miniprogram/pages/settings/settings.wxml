@@ -1,0 +1,86 @@
+<view class="container">
+  <!-- 指标管理 -->
+  <view class="card">
+    <view class="card-title">📋 指标管理</view>
+    <view wx:for="{{metricDefs}}" wx:key="index" class="metric-row">
+      <view class="metric-info">
+        <text class="metric-name">{{item.name}}</text>
+        <text class="metric-unit" wx:if="{{item.unit}}">单位: {{item.unit}}</text>
+      </view>
+      <button class="btn-del" size="mini" bindtap="deleteMetric" data-index="{{index}}">删除</button>
+    </view>
+    <view wx:if="{{metricDefs.length === 0}}" class="empty-tip" style="padding: 40rpx 0;">
+      暂无指标，请添加
+    </view>
+
+    <!-- 添加指标 -->
+    <view class="add-metric-form">
+      <input class="input-field" placeholder="指标名称 (如: 销售额)" value="{{newMetricName}}" bindinput="onNewNameInput" />
+      <input class="input-field" placeholder="单位 (如: 元)" value="{{newMetricUnit}}" bindinput="onNewUnitInput" />
+      <button class="btn-primary" style="margin-top: 16rpx;" bindtap="addMetric">
+        添加指标
+      </button>
+    </view>
+
+    <button class="btn-primary" bindtap="saveMetrics" loading="{{savingMetrics}}" style="margin-top: 16rpx;">
+      保存指标配置
+    </button>
+  </view>
+
+  <!-- 模版管理 -->
+  <view class="card">
+    <view class="card-title">📝 模版管理</view>
+
+    <view class="input-label">选择模版</view>
+    <picker wx:if="{{templates.length > 0}}" mode="selector"
+            range="{{templates}}" range-key="name"
+            value="{{selectedTemplateIndex}}"
+            bindchange="onTemplateSelect">
+      <view class="date-display">{{templates[selectedTemplateIndex].name || '选择模版'}}</view>
+    </picker>
+    <view wx:if="{{templates.length === 0}}" class="empty-tip" style="padding: 20rpx 0;">
+      暂无模版
+    </view>
+
+    <view class="input-label" style="margin-top: 24rpx;">模版名称</view>
+    <input class="input-field" placeholder="模版名称" value="{{templateName}}" bindinput="onTemplateNameInput" />
+
+    <view class="input-label" style="margin-top: 24rpx;">模版内容</view>
+    <textarea
+      class="input-field textarea"
+      placeholder="编写模版，使用 {指标名} 作为占位符&#10;&#10;示例:&#10;【业绩日报】{date}&#10;今日完成{销售额}，拜访{客户数}位。"
+      value="{{templateContent}}"
+      bindinput="onTemplateContentInput"
+      auto-height
+      maxlength="-1"
+    />
+
+    <!-- 占位符帮助 -->
+    <view class="help-box">
+      <view class="help-title">📌 占位符说明</view>
+      <view class="help-item"><text class="code">{date}</text> → 日期</view>
+      <view class="help-item"><text class="code">{指标名}</text> → 该指标的值+单位 (如 5000元)</view>
+      <view class="help-item"><text class="code">{指标名:值}</text> → 仅值 (如 5000)</view>
+      <view class="help-item"><text class="code">{指标名:单位}</text> → 仅单位 (如 元)</view>
+      <view wx:if="{{metricDefs.length > 0}}" class="help-divider">你的指标占位符:</view>
+      <view wx:for="{{metricDefs}}" wx:key="name" class="help-item">
+        <text class="code">{{'{' + item.name + '}'}}</text>
+        <text wx:if="{{item.unit}}"> → {{item.name}} + {{item.unit}}</text>
+      </view>
+    </view>
+
+    <button class="btn-primary" bindtap="saveTemplate" loading="{{savingTemplate}}">
+      保存模版
+    </button>
+    <button wx:if="{{templates.length > 1}}" class="btn-cancel" bindtap="deleteTemplate">
+      删除当前模版
+    </button>
+  </view>
+
+  <!-- API 地址 -->
+  <view class="card">
+    <view class="card-title">🔧 API 地址</view>
+    <input class="input-field" placeholder="后端地址" value="{{baseUrl}}" bindinput="onBaseUrlInput" />
+    <button class="btn-primary" bindtap="saveBaseUrl">保存地址</button>
+  </view>
+</view>

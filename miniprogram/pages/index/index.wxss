@@ -1,0 +1,29 @@
+.date-display {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1677ff;
+  text-align: center;
+  padding: 20rpx;
+  background: #f0f5ff;
+  border-radius: 12rpx;
+}
+
+.textarea {
+  height: 150rpx;
+  padding: 20rpx;
+}
+
+.summary-box {
+  margin-top: 32rpx;
+  padding: 24rpx;
+  background: #fffbe6;
+  border: 2rpx solid #ffe58f;
+  border-radius: 12rpx;
+}
+
+.summary-text {
+  font-size: 30rpx;
+  line-height: 1.8;
+  color: #333;
+  white-space: pre-wrap;
+}

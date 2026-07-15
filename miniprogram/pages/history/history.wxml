@@ -1,0 +1,50 @@
+<view class="container">
+  <!-- 月份选择 -->
+  <view class="card">
+    <view class="card-title">📅 选择月份</view>
+    <picker mode="date" fields="month" value="{{selectedMonth}}" bindchange="onMonthChange">
+      <view class="date-display">{{selectedMonthText}}</view>
+    </picker>
+  </view>
+
+  <!-- 记录列表 -->
+  <view class="card">
+    <view class="card-title">📊 业绩记录</view>
+    <view wx:if="{{records.length === 0}}" class="empty-tip">
+      该月暂无记录
+    </view>
+    <view wx:for="{{records}}" wx:key="id" class="record-item" bindtap="viewRecord" data-record="{{item}}">
+      <view class="record-date">{{item.recordDate}}</view>
+      <view class="record-metrics">
+        <text wx:for="{{item.metrics}}" wx:for-item="m" wx:key="metricName" class="metric-tag">
+          {{m.metricName}}: {{m.metricValue}}{{m.unit}}
+        </text>
+      </view>
+      <view class="record-actions" catchtap="stopPropagation">
+        <button class="btn-small" size="mini" bindtap="editRecord" data-record="{{item}}">编辑</button>
+        <button class="btn-small btn-del" size="mini" bindtap="deleteConfirm" data-id="{{item.id}}">删除</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 编辑弹窗 -->
+  <view wx:if="{{showEdit}}" class="modal-mask" bindtap="closeEdit">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-title">编辑记录 - {{editDate}}</view>
+      <scroll-view scroll-y="true" style="max-height: 600rpx;">
+        <view wx:for="{{editMetrics}}" wx:key="name" class="input-group">
+          <view class="input-label">{{item.name}}{{item.unit ? '(' + item.unit + ')' : ''}}</view>
+          <input
+            class="input-field"
+            type="number"
+            value="{{item.value}}"
+            data-index="{{index}}"
+            bindinput="onEditMetricInput"
+          />
+        </view>
+      </scroll-view>
+      <button class="btn-primary" bindtap="saveEdit">保存修改</button>
+      <button class="btn-cancel" bindtap="closeEdit">取消</button>
+    </view>
+  </view>
+</view>

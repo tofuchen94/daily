@@ -1,0 +1,59 @@
+<view class="container">
+  <!-- 日期选择 -->
+  <view class="card">
+    <view class="card-title">📅 选择日期</view>
+    <picker mode="date" value="{{recordDate}}" bindchange="onDateChange">
+      <view class="date-display">{{recordDateText}}</view>
+    </picker>
+  </view>
+
+  <!-- 指标填写 -->
+  <view class="card">
+    <view class="card-title">📝 填写业绩</view>
+    <view wx:if="{{metrics.length === 0}}" class="empty-tip">
+      还没有添加指标，请先到「设置」中添加
+    </view>
+    <view wx:for="{{metrics}}" wx:key="name" class="input-group">
+      <view class="input-label">{{item.name}}{{item.unit ? '(' + item.unit + ')' : ''}}</view>
+      <input
+        class="input-field"
+        type="number"
+        placeholder="请输入{{item.name}}"
+        value="{{item.value}}"
+        data-index="{{index}}"
+        bindinput="onMetricInput"
+      />
+    </view>
+
+    <!-- 备注 -->
+    <view class="input-group" style="margin-top: 32rpx;">
+      <view class="input-label">备注</view>
+      <textarea
+        class="input-field textarea"
+        placeholder="其他补充说明..."
+        value="{{note}}"
+        bindinput="onNoteInput"
+        auto-height
+        maxlength="-1"
+      />
+    </view>
+
+    <button class="btn-primary" bindtap="saveRecord" loading="{{saving}}">
+      保存记录
+    </button>
+  </view>
+
+  <!-- 生成总结 -->
+  <view class="card">
+    <view class="card-title">✨ 生成总结</view>
+    <button class="btn-primary" style="background:#52c41a;" bindtap="generateSummary" loading="{{generating}}">
+      生成总结文案
+    </button>
+    <view wx:if="{{summary}}" class="summary-box">
+      <text class="summary-text">{{summary}}</text>
+      <button class="btn-primary" style="background:#fa8c16; margin-top: 20rpx;" bindtap="copySummary">
+        一键复制
+      </button>
+    </view>
+  </view>
+</view>
