@@ -1,0 +1,9 @@
+feat: 集成 SpringDoc 文档 + 远程 MySQL 部署支持
+
+- 新增 SpringDoc OpenAPI（Swagger UI），所有 Controller 添加 @Operation 中文注释
+- 新增 OpenApiConfig 配置类，自定义 API 标题/版本
+- application-dev.yml 改为连接远程 MySQL，敏感信息抽离为环境变量
+- 修复 application-cloud.yml 编码和变量名问题
+- 新增 Dockerfile.deploy（服务器部署用，跳过 Maven 构建）
+- 新增 deploy-guide.md 部署文档 + .env.example 环境变量模板
+- pom.xml 添加 springdoc 依赖，修复 UTF-8 编码配置

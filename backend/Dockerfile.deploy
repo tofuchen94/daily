@@ -1,0 +1,15 @@
+# ========== 运行阶段 (使用本地预构建的 JAR) ==========
+FROM eclipse-temurin:17-jre
+
+WORKDIR /app
+
+COPY daily-performance-1.0.0.jar app.jar
+
+# 云托管默认端口 80
+ENV PORT=80
+EXPOSE 80
+
+# 激活 cloud 配置 (使用 MySQL)
+ENV SPRING_PROFILES_ACTIVE=cloud
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
