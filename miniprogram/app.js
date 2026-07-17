@@ -1,9 +1,8 @@
 // app.js
 App({
   globalData: {
-    // 后端 API 地址 - 开发时改为你的电脑 IP
-    // 微信开发者工具 -> 设置 -> 代理 -> 不校验合法域名（勾选）
-    baseUrl: 'http://localhost:8080'
+    // 后端 API 地址（生产环境）
+    baseUrl: 'https://daily1116.online'
   },
 
   onLaunch() {
