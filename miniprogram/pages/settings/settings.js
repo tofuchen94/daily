@@ -134,12 +134,7 @@ Page({
     if (this.data.selectedTemplateIndex < 0) return;
     const tpl = this.data.templates[this.data.selectedTemplateIndex];
     try {
-      await api.saveTemplate({
-        id: tpl.id,
-        name: tpl.name,
-        content: tpl.content,
-        isDefault: 1
-      });
+      await api.setDefaultTemplate(tpl.id);
       wx.showToast({ title: '已设为默认模版', icon: 'success' });
       this.loadTemplates();
     } catch (e) {

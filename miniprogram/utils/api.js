@@ -41,6 +41,7 @@ module.exports = {
   getTemplates: () => request('GET', '/api/templates'),
   saveTemplate: (data) => request('POST', '/api/templates', data),
   deleteTemplate: (id) => request('DELETE', `/api/templates/${id}`),
+  setDefaultTemplate: (id) => request('PUT', `/api/templates/${id}/set-default`),
 
   // 生成总结
   generate: (date, templateId) => {

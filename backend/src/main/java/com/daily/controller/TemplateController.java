@@ -53,4 +53,14 @@ public class TemplateController {
         result.put("msg", "ok");
         return result;
     }
+
+    @Operation(summary = "设为默认模板", description = "将指定模板设为默认，其他模板自动取消默认标记")
+    @PutMapping("/{id}/set-default")
+    public Map<String, Object> setDefault(@Parameter(description = "模板 ID") @PathVariable Long id) {
+        templateService.setDefault(id);
+        Map<String, Object> result = new HashMap<>();
+        result.put("code", 0);
+        result.put("msg", "ok");
+        return result;
+    }
 }

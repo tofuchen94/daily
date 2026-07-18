@@ -41,4 +41,14 @@ public class TemplateService {
     public Template getDefault() {
         return templateMapper.findDefault();
     }
+
+    @Transactional
+    public void setDefault(Long id) {
+        templateMapper.clearDefault();
+        Template tpl = templateMapper.selectById(id);
+        if (tpl != null) {
+            tpl.setIsDefault(1);
+            templateMapper.updateById(tpl);
+        }
+    }
 }
