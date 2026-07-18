@@ -73,7 +73,7 @@
       <button class="btn-secondary" bindtap="addTemplate" style="flex:1;">
         ➕ 新增模版
       </button>
-      <button class="btn-primary" bindtap="saveTemplate" loading="{{savingTemplate}}" style="flex:1;">
+      <button class="btn-primary" bindtap="saveTemplate" loading="{{savingTemplate}}" style="flex:1;margin-top:0;">
         保存{{templateMode === 'new' ? '新模版' : '模版'}}
       </button>
     </view>
