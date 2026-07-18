@@ -13,6 +13,6 @@ public interface DailyRecordMapper extends BaseMapper<DailyRecord> {
     @Select("SELECT * FROM daily_records WHERE record_date = #{date}")
     DailyRecord findByDate(@Param("date") LocalDate date);
 
-    @Select("SELECT * FROM daily_records WHERE strftime('%Y-%m', record_date) = #{month} ORDER BY record_date DESC")
+    @Select("SELECT * FROM daily_records WHERE record_date LIKE CONCAT(#{month}, '%') ORDER BY record_date DESC")
     List<DailyRecord> findByMonth(@Param("month") String month);
 }
