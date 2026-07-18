@@ -11,10 +11,10 @@ Page({
     generating: false
   },
 
-  onShow() {
+  async onShow() {
     this.setToday();
-    this.loadMetrics();
-    this.loadTodayRecord();
+    await this.loadMetrics();    // 先确保指标定义加载完成
+    this.loadTodayRecord();      // 再加载今日记录（此时 this.data.metrics 已有数据）
   },
 
   // 设置默认日期为今天
