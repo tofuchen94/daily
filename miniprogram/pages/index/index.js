@@ -33,13 +33,16 @@ Page({
   async loadMetrics() {
     try {
       const metrics = await api.getMetrics();
-      this.setData({
-        metrics: metrics.map(m => ({
-          name: m.name,
-          unit: m.unit || '',
-          sortOrder: m.sortOrder,
-          value: ''
-        }))
+      // 用 Promise + callback 确保 setData 真正完成
+      return new Promise((resolve) => {
+        this.setData({
+          metrics: metrics.map(m => ({
+            name: m.name,
+            unit: m.unit || '',
+            sortOrder: m.sortOrder,
+            value: ''
+          }))
+        }, resolve);
       });
     } catch (e) {
       // 静默失败
