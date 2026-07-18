@@ -39,7 +39,7 @@
       <view class="date-display">{{templates[selectedTemplateIndex].name || '选择模版'}}</view>
     </picker>
     <view wx:if="{{templates.length === 0}}" class="empty-tip" style="padding: 20rpx 0;">
-      暂无模版
+      暂无模版，请点击下方新增
     </view>
 
     <view class="input-label" style="margin-top: 24rpx;">模版名称</view>
@@ -69,9 +69,14 @@
       </view>
     </view>
 
-    <button class="btn-primary" bindtap="saveTemplate" loading="{{savingTemplate}}">
-      保存模版
-    </button>
+    <view class="template-actions" style="display:flex;gap:16rpx;">
+      <button class="btn-secondary" bindtap="addTemplate" style="flex:1;">
+        ➕ 新增模版
+      </button>
+      <button class="btn-primary" bindtap="saveTemplate" loading="{{savingTemplate}}" style="flex:1;">
+        保存{{templateMode === 'new' ? '新模版' : '模版'}}
+      </button>
+    </view>
     <button wx:if="{{templates.length > 1}}" class="btn-cancel" bindtap="deleteTemplate">
       删除当前模版
     </button>

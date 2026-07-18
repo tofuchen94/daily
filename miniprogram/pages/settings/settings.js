@@ -12,6 +12,7 @@ Page({
     // 模版
     templates: [],
     selectedTemplateIndex: 0,
+    templateMode: 'edit',  // 'edit' | 'new'
     templateName: '',
     templateContent: '',
     savingTemplate: false,
@@ -114,8 +115,18 @@ Page({
     const tpl = this.data.templates[index];
     this.setData({
       selectedTemplateIndex: index,
+      templateMode: 'edit',
       templateName: tpl.name,
       templateContent: tpl.content
+    });
+  },
+
+  addTemplate() {
+    this.setData({
+      templateMode: 'new',
+      templateName: '',
+      templateContent: '',
+      selectedTemplateIndex: -1
     });
   },
 
@@ -139,8 +150,8 @@ Page({
         content: this.data.templateContent,
         isDefault: 1  // 新保存的设为默认
       };
-      // 如果已有模版被选中，更新它
-      if (this.data.templates.length > 0) {
+      // 编辑模式：更新已有模版；新增模式：不传 id，后端会 insert
+      if (this.data.templateMode === 'edit' && this.data.selectedTemplateIndex >= 0) {
         tpl.id = this.data.templates[this.data.selectedTemplateIndex].id;
       }
       await api.saveTemplate(tpl);
