@@ -130,6 +130,23 @@ Page({
     });
   },
 
+  async setDefault() {
+    if (this.data.selectedTemplateIndex < 0) return;
+    const tpl = this.data.templates[this.data.selectedTemplateIndex];
+    try {
+      await api.saveTemplate({
+        id: tpl.id,
+        name: tpl.name,
+        content: tpl.content,
+        isDefault: 1
+      });
+      wx.showToast({ title: '已设为默认模版', icon: 'success' });
+      this.loadTemplates();
+    } catch (e) {
+      wx.showToast({ title: '设置失败', icon: 'none' });
+    }
+  },
+
   onTemplateNameInput(e) {
     this.setData({ templateName: e.detail.value });
   },
@@ -147,12 +164,15 @@ Page({
     try {
       const tpl = {
         name: this.data.templateName,
-        content: this.data.templateContent,
-        isDefault: 1  // 新保存的设为默认
+        content: this.data.templateContent
       };
-      // 编辑模式：更新已有模版；新增模式：不传 id，后端会 insert
+      // 编辑模式保留原 isDefault，新增模式不设默认
       if (this.data.templateMode === 'edit' && this.data.selectedTemplateIndex >= 0) {
         tpl.id = this.data.templates[this.data.selectedTemplateIndex].id;
+        tpl.isDefault = this.data.templates[this.data.selectedTemplateIndex].isDefault;
+      } else if (this.data.templates.length === 0) {
+        // 第一个模版自动设为默认
+        tpl.isDefault = 1;
       }
       await api.saveTemplate(tpl);
       wx.showToast({ title: '模版已保存', icon: 'success' });

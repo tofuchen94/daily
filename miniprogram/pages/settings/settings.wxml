@@ -36,7 +36,10 @@
             range="{{templates}}" range-key="name"
             value="{{selectedTemplateIndex}}"
             bindchange="onTemplateSelect">
-      <view class="date-display">{{templates[selectedTemplateIndex].name || '选择模版'}}</view>
+      <view class="date-display">
+        {{templates[selectedTemplateIndex].name || '选择模版'}}
+        <text wx:if="{{templates.length > 0 && templates[selectedTemplateIndex].isDefault === 1}}" class="default-badge">默认</text>
+      </view>
     </picker>
     <view wx:if="{{templates.length === 0}}" class="empty-tip" style="padding: 20rpx 0;">
       暂无模版，请点击下方新增
@@ -79,6 +82,9 @@
     </view>
     <button wx:if="{{templates.length > 1}}" class="btn-cancel" bindtap="deleteTemplate">
       删除当前模版
+    </button>
+    <button wx:if="{{templates.length > 0 && templateMode === 'edit' && templates[selectedTemplateIndex].isDefault !== 1}}" class="btn-default" bindtap="setDefault">
+      设为默认模版
     </button>
   </view>
 
