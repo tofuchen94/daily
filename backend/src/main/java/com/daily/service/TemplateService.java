@@ -1,5 +1,6 @@
 package com.daily.service;
 
+import com.daily.config.UserContext;
 import com.daily.entity.Template;
 import com.daily.mapper.TemplateMapper;
 import org.springframework.stereotype.Service;
@@ -16,18 +17,28 @@ public class TemplateService {
         this.templateMapper = templateMapper;
     }
 
+    private Long userId() {
+        return UserContext.get();
+    }
+
     public List<Template> listAll() {
-        return templateMapper.selectList(null);
+        Long uid = userId();
+        return templateMapper.selectList(
+                new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<Template>()
+                        .eq(Template::getUserId, uid)
+                        .orderByAsc(Template::getId));
     }
 
     @Transactional
     public Template save(Template template) {
+        Long uid = userId();
         if (template.getIsDefault() != null && template.getIsDefault() == 1) {
-            templateMapper.clearDefault();
+            templateMapper.clearDefault(uid);
         }
         if (template.getId() != null && templateMapper.selectById(template.getId()) != null) {
             templateMapper.updateById(template);
         } else {
+            template.setUserId(uid);
             templateMapper.insert(template);
         }
         return template;
@@ -39,12 +50,13 @@ public class TemplateService {
     }
 
     public Template getDefault() {
-        return templateMapper.findDefault();
+        return templateMapper.findDefault(userId());
     }
 
     @Transactional
     public void setDefault(Long id) {
-        templateMapper.clearDefault();
+        Long uid = userId();
+        templateMapper.clearDefault(uid);
         Template tpl = templateMapper.selectById(id);
         if (tpl != null) {
             tpl.setIsDefault(1);

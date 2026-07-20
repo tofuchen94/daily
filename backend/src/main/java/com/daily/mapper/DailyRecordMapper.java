@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface DailyRecordMapper extends BaseMapper<DailyRecord> {
 
-    @Select("SELECT * FROM daily_records WHERE record_date = #{date}")
-    DailyRecord findByDate(@Param("date") LocalDate date);
+    @Select("SELECT * FROM daily_records WHERE user_id = #{userId} AND record_date = #{date}")
+    DailyRecord findByDate(@Param("userId") Long userId, @Param("date") LocalDate date);
 
-    @Select("SELECT * FROM daily_records WHERE record_date LIKE CONCAT(#{month}, '%') ORDER BY record_date DESC")
-    List<DailyRecord> findByMonth(@Param("month") String month);
+    @Select("SELECT * FROM daily_records WHERE user_id = #{userId} AND record_date LIKE CONCAT(#{month}, '%') ORDER BY record_date DESC")
+    List<DailyRecord> findByMonth(@Param("userId") Long userId, @Param("month") String month);
 }
