@@ -1,5 +1,6 @@
 package com.daily.service;
 
+import com.daily.config.UserContext;
 import com.daily.entity.MetricDefinition;
 import com.daily.mapper.MetricDefinitionMapper;
 import org.springframework.stereotype.Service;
@@ -16,18 +17,24 @@ public class MetricService {
         this.metricMapper = metricMapper;
     }
 
+    private Long userId() {
+        return UserContext.get();
+    }
+
     public List<MetricDefinition> listAll() {
-        return metricMapper.findAllOrdered();
+        return metricMapper.findAllOrdered(userId());
     }
 
     @Transactional
     public List<MetricDefinition> saveAll(List<MetricDefinition> metrics) {
-        metricMapper.deleteAll();
+        Long uid = userId();
+        metricMapper.deleteAllByUserId(uid);
         if (metrics != null && !metrics.isEmpty()) {
             for (MetricDefinition m : metrics) {
+                m.setUserId(uid);
                 metricMapper.insert(m);
             }
         }
-        return metricMapper.findAllOrdered();
+        return metricMapper.findAllOrdered(uid);
     }
 }

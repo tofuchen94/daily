@@ -11,10 +11,10 @@ Page({
     generating: false
   },
 
-  onShow() {
+  async onShow() {
     this.setToday();
-    this.loadMetrics();
-    this.loadTodayRecord();
+    await this.loadMetrics();    // 先确保指标定义加载完成
+    this.loadTodayRecord();      // 再加载今日记录（此时 this.data.metrics 已有数据）
   },
 
   // 设置默认日期为今天
@@ -33,13 +33,16 @@ Page({
   async loadMetrics() {
     try {
       const metrics = await api.getMetrics();
-      this.setData({
-        metrics: metrics.map(m => ({
-          name: m.name,
-          unit: m.unit || '',
-          sortOrder: m.sortOrder,
-          value: ''
-        }))
+      // 用 Promise + callback 确保 setData 真正完成
+      return new Promise((resolve) => {
+        this.setData({
+          metrics: metrics.map(m => ({
+            name: m.name,
+            unit: m.unit || '',
+            sortOrder: m.sortOrder,
+            value: ''
+          }))
+        }, resolve);
       });
     } catch (e) {
       // 静默失败

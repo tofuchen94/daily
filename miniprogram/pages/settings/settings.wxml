@@ -36,10 +36,13 @@
             range="{{templates}}" range-key="name"
             value="{{selectedTemplateIndex}}"
             bindchange="onTemplateSelect">
-      <view class="date-display">{{templates[selectedTemplateIndex].name || '选择模版'}}</view>
+      <view class="date-display">
+        {{templates[selectedTemplateIndex].name || '选择模版'}}
+        <text wx:if="{{templates.length > 0 && templates[selectedTemplateIndex].isDefault === 1}}" class="default-badge">默认</text>
+      </view>
     </picker>
     <view wx:if="{{templates.length === 0}}" class="empty-tip" style="padding: 20rpx 0;">
-      暂无模版
+      暂无模版，请点击下方新增
     </view>
 
     <view class="input-label" style="margin-top: 24rpx;">模版名称</view>
@@ -69,11 +72,19 @@
       </view>
     </view>
 
-    <button class="btn-primary" bindtap="saveTemplate" loading="{{savingTemplate}}">
-      保存模版
-    </button>
+    <view class="template-actions" style="display:flex;gap:16rpx;">
+      <button class="btn-secondary" bindtap="addTemplate" style="flex:1;">
+        ➕ 新增模版
+      </button>
+      <button class="btn-primary" bindtap="saveTemplate" loading="{{savingTemplate}}" style="flex:1;margin-top:0;">
+        保存{{templateMode === 'new' ? '新模版' : '模版'}}
+      </button>
+    </view>
     <button wx:if="{{templates.length > 1}}" class="btn-cancel" bindtap="deleteTemplate">
       删除当前模版
+    </button>
+    <button wx:if="{{templates.length > 0 && templateMode === 'edit' && templates[selectedTemplateIndex].isDefault !== 1}}" class="btn-default" bindtap="setDefault">
+      设为默认模版
     </button>
   </view>
 

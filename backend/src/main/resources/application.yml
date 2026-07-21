@@ -13,3 +13,11 @@ mybatis-plus:
 # schema 初始化脚本 (每个 profile 覆盖此路径)
 app:
   schema-location: classpath:schema.sql
+  jwt:
+    secret: ${JWT_SECRET:daily-report-jwt-secret-key-2024}
+    expiration-ms: 2592000000  # 30 天
+
+# 微信小程序配置（从环境变量读取，避免泄露）
+wechat:
+  app-id: ${WECHAT_APP_ID:wxc9cfa5c89342ec3d}
+  app-secret: ${WECHAT_APP_SECRET:}

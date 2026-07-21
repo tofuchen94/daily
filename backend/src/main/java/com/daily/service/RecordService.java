@@ -1,5 +1,6 @@
 package com.daily.service;
 
+import com.daily.config.UserContext;
 import com.daily.entity.DailyRecord;
 import com.daily.entity.RecordMetric;
 import com.daily.entity.Template;
@@ -29,8 +30,13 @@ public class RecordService {
         this.templateService = templateService;
     }
 
+    private Long userId() {
+        return UserContext.get();
+    }
+
     public List<DailyRecord> listByMonth(String month) {
-        List<DailyRecord> records = recordMapper.findByMonth(month);
+        Long uid = userId();
+        List<DailyRecord> records = recordMapper.findByMonth(uid, month);
         for (DailyRecord r : records) {
             r.setMetrics(metricMapper.findByRecordId(r.getId()));
         }
@@ -38,7 +44,8 @@ public class RecordService {
     }
 
     public DailyRecord getByDate(LocalDate date) {
-        DailyRecord record = recordMapper.findByDate(date);
+        Long uid = userId();
+        DailyRecord record = recordMapper.findByDate(uid, date);
         if (record != null) {
             record.setMetrics(metricMapper.findByRecordId(record.getId()));
         }
@@ -47,9 +54,11 @@ public class RecordService {
 
     @Transactional
     public DailyRecord save(LocalDate date, List<RecordMetric> metrics) {
-        DailyRecord record = recordMapper.findByDate(date);
+        Long uid = userId();
+        DailyRecord record = recordMapper.findByDate(uid, date);
         if (record == null) {
             record = new DailyRecord(date);
+            record.setUserId(uid);
             recordMapper.insert(record);
         } else {
             record.setUpdatedAt(java.time.LocalDateTime.now());
@@ -109,7 +118,6 @@ public class RecordService {
         content = content.replace("{date}", date.format(fmt));
 
         // Replace metric placeholders: {name}, {name:值}, {name:单位}
-        // Match: {anything that's not date}
         Pattern p = Pattern.compile("\\{([^}]+)\\}");
         Matcher m = p.matcher(content);
         StringBuffer sb = new StringBuffer();
@@ -122,23 +130,23 @@ public class RecordService {
                 String[] parts = key.split(":", 2);
                 String name = parts[0];
                 String mode = parts[1];
-                RecordMetric metric = metricMap.get(name);
-                if (metric != null) {
+                RecordMetric rm = metricMap.get(name);
+                if (rm != null) {
                     if ("值".equals(mode)) {
-                        m.appendReplacement(sb, Matcher.quoteReplacement(metric.getMetricValue()));
+                        m.appendReplacement(sb, Matcher.quoteReplacement(rm.getMetricValue()));
                     } else if ("单位".equals(mode)) {
                         m.appendReplacement(sb, Matcher.quoteReplacement(
-                                metric.getUnit() != null ? metric.getUnit() : ""));
+                                rm.getUnit() != null ? rm.getUnit() : ""));
                     }
                 } else {
                     m.appendReplacement(sb, "");
                 }
             } else {
-                RecordMetric metric = metricMap.get(key);
-                if (metric != null) {
-                    String val = metric.getMetricValue();
-                    if (metric.getUnit() != null && !metric.getUnit().isEmpty()) {
-                        val += metric.getUnit();
+                RecordMetric rm = metricMap.get(key);
+                if (rm != null) {
+                    String val = rm.getMetricValue();
+                    if (rm.getUnit() != null && !rm.getUnit().isEmpty()) {
+                        val += rm.getUnit();
                     }
                     m.appendReplacement(sb, Matcher.quoteReplacement(val));
                 } else {
