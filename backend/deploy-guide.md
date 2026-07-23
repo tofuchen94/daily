@@ -73,6 +73,9 @@ docker run -d \
   -e MYSQL_USER=<你的数据库用户名> \
   -e MYSQL_PASSWORD=<你的数据库密码> \
   -e PORT=80 \
+  -e WECHAT_APP_ID=wxc9cfa5c89342ec3d \
+  -e WECHAT_APP_SECRET=你的AppSecret \
+  -e JWT_SECRET=一个随机字符串（越长越好） \
   daily-backend:latest
 ```
 
